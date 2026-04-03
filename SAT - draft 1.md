@@ -281,21 +281,30 @@ In 1.1 to 1.2, the key considerations for this project were discussed. From this
 For this project to work, that basic components that make up the project need to be analysed. 
 #### 2.1.1 - Processor
 First the microcontroller that we need to use should be discussed. The baseline limitations for what microcontroller we use comes down to power consumption and size. It needs to be small and be able to last a long time. We need to choose between 4 possible options that match these requirements. 
-##### SEEED Studio XAIO ESP32-C3
+##### SEEED Studio XAIO ESP32-C3 - [18]  [19]
 - 400KB ram
 - BLE 5.0
 - 4MB flash
 - Lithium battery charging chip
 - single core
-##### SEEED Studio XAIO ESP32-C6
+##### SEEED Studio XAIO ESP32-C6 - [18]
 - 512KB SRAM
 - 4MB Flash
 - 2 cores, High performance and low power
-- 
-##### Silicon Labs SiWx91
-##### Arduino Nano ESP32
+- Lithium Battery charging chip
+##### Silicon Labs SiWx91 - [17]
+- 8MB flash
+- 8MB PSRAM
+- 22 µA current draw
+- WIFI 6
+- Dual core
+##### Arduino Nano ESP32 - [16]
+- Dual core 240Hz
+- WIFI 4
+- 14 Digital pin 
+- 16Mb external flash
 ##### Comparison
-###### Table 2.2.1
+###### Table 2.1.1
 
 | Feature        | ESP32-C3 (XIAO)                                                              | ESP32-C6 (XIAO)                                  | SiWx917 (Module)                                                              | Arduino Nano ESP32                                    |
 | -------------- | ---------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
@@ -306,6 +315,46 @@ First the microcontroller that we need to use should be discussed. The baseline 
 | Price (Approx) | $8 – $11 AUD                                                                 | $10 – $13 AUD                                    | $12 – $15 AUD (Module)                                                        | <font color="#ff0000">$32 – $38 AUD</font>            |
 | Additional     | RISC-V; hobbyist fave                                                        | Wi-Fi 6, Matter, Efficiency cores                | Ultra-Low Wi-Fi Keep-Alive                                                    | Dual-core S3; official support                        |
 | Weight         | ~2g                                                                          | ~2g                                              | >1g                                                                           | <7g                                                   |
+
+
+
+
+
 From the table we can see a breakdown of the positive qualities and the negative qualities of each board. Firstly we can immediately cut out the SiWx917. The SiWx917 only exits as a chip, meaning that we would need to design a board and everything for it, which would drive up the price. Next, we can remove the Arduino Nano ESP32. This esp32 is firstly way too large to be justified and may interfere with the player, it is too expensive and is we use this, the project cannot fit the budget. It is also the heaviest on the list. We we can also justify not using the SiWx917 and the Arduino Nano Esp32 as they are the only boards that don't have a onboards power management system, meaning that a additional board if needed to facilitate power management.  
-This leaves us with the ESP32-C3 and ESP32-C6. The ESP32-C3 is cheaper, however to retain a longer battery life it is more beneficial to choose the system with the lower power draw. Both systems weigh approximately the same, and have the same dimensions. So now its a matter of comparing the lower price of the ESP32-C3 to the more advanced Bluetooth of the ESP32-C6 and its lower power draw. I believe that the extra ~$2 is worth the upgrades, especially with the efficiency cores. This is why the ESP32-C6 will be chosen as the main microcontroller of the system. 
-#### 2.1.2
+This leaves us with the ESP32-C3 and ESP32-C6. The ESP32-C3 is cheaper, however to retain a longer battery life it is more beneficial to choose the system with the lower power draw. Both systems weigh approximately the same, and have the same dimensions. So now its a matter of comparing the lower price of the ESP32-C3 to the more advanced Bluetooth of the ESP32-C6 and its lower power draw. I believe that the extra ~$2 is worth the upgrades, especially with the efficiency cores. This is why the ESP32-C6 will be chosen as the main microcontroller of the system. In the case that the system starts to creep above budget, this will be reverted to the ESP32-C3
+#### 2.1.2 - Accelerometer
+Next, the accelerometer that will be used needs to be finalised. While there are not many specifications required for our accelerometer, we still need it to be cheap, largely accurate, and fit within our system. For a metric, we can assume that the maximum size of the accelerometer is the size of the SoC chosen, namely the ESP32-C6, with a size of 21 x 17.5 mm. 
+##### GY-91 (MPU-9250 + BMP280)
+- 20.5 x 14.3 mm
+- 9-axis (Accel/Gyro/Mag) plus a Barometer (10-DOF total).
+- ~$7.60 – $8.50
+##### BNO085 (9-DOF AHRS)
+- ~20 x 15 mm
+- 9-axis with an onboard ARM Cortex-M0 processor
+- ~$9.40 – $12.00
+##### BNO055 (Absolute Orientation)
+- ~20 x 12 mm
+- 9-axis Absolute Orientation
+- ~$10.30 – $14.50
+- It outputs Euler angles and Quaternions directly
+##### Comparision
+###### Table 2.1.2
+| Module                            | Dimensions                                  | Key Features                                                                | Price (AUD)                                 |
+| --------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------- |
+| **GY-91 (MPU-9250 + BMP280)**     | <font color="#00b050">20.5 x 14.3 mm</font> | 9-axis (Accel/Gyro/Mag) + Barometer (10-DOF total)                          | <font color="#00b050">~$7.60 – $8.50</font> |
+| **BNO085 (9-DOF AHRS)**           | <font color="#00b050">~20 x 15 mm</font>    | 9-axis with onboard ARM Cortex-M0 processor                                 | ~$9.40 – $12.00                             |
+| **BNO055 (Absolute Orientation)** | <font color="#00b050">~20 x 12 mm</font>    | 9-axis; <font color="#00b050">outputs Euler angles and Quaternions directly | ~$10.30 – $14.50          </font>           |
+All of the options for IMUs are perfectly viable for the project. So the decision of what IMU to use goes down to Price and additional features. The feature that caught my eye was the automatic Quaternion output of the BNO055. This feature helps reduce the amount of software that needs to be built to help analyse the tennis stroke, and this will help in the production. However it is nearly double the cost of the GY-91. The question arises weather the extra up to 7 dollars are worth the ease of software development. 
+The tie-breaker here would be overall power draw. As Battey 
+
+Like nothing much
+she gave me her side
+about how she has to choose her bf over you
+she says that its betraying her bf, as they (steven only ig) would hate him
+Vitchea is mad at you?
+Lyz doesnt hate you, she wants to tecah you a lesson
+Idk whats with vitchea
+
+
+You did dog her, and she needs to be in good books with steven and stuff
+she doesnt "hate" you

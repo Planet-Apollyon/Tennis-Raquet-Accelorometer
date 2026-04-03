@@ -13,3 +13,7 @@
 13. B. van Trigt, et al. “Uncovering the Hidden Mechanics of Upper Body Rotations in Tennis Serves Using Wearable Sensors on Dutch Professional Players.” _Frontiers in Sports and Active Living_, vol. 6, 7 Jan. 2025, https://doi.org/10.3389/fspor.2024.1463299.
 14. “Reddit - the Heart of the Internet.” _Reddit.com_, 2026, www.reddit.com/r/10s/comments/1g9pqzi/how_long_do_you_usually_play_in_a_session/. Accessed 9 Mar. 2026.
 15. “ESP32-C6 Wi-Fi 6 & BLE 5 & Thread/Zigbee SoC | Espressif Systems.” _Www.espressif.com_, www.espressif.com/en/products/socs/esp32-c6.
+16. “Nano ESP32.” _Arduino.cc_, 2024, docs.arduino.cc/hardware/nano-esp32/.
+17. “Silicon Labs.” _Silabs.com_, 2026, www.silabs.com/wireless/wi-fi/siwx917-wireless-socs. Accessed 31 Mar. 2026.
+18. “Getting Started with Seeed Studio XIAO ESP32C6 | Seeed Studio Wiki.” _Seeedstudio.com_, 5 Aug. 2024, wiki.seeedstudio.com/xiao_esp32c6_getting_started/.
+19. “Getting Started with Seeed Studio XIAO ESP32C3 - Seeed Wiki.” _Wiki.seeedstudio.com_, wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/.
