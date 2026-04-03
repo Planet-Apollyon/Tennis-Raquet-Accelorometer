@@ -316,10 +316,6 @@ First the microcontroller that we need to use should be discussed. The baseline 
 | Additional     | RISC-V; hobbyist fave                                                        | Wi-Fi 6, Matter, Efficiency cores                | Ultra-Low Wi-Fi Keep-Alive                                                    | Dual-core S3; official support                        |
 | Weight         | ~2g                                                                          | ~2g                                              | >1g                                                                           | <7g                                                   |
 
-
-
-
-
 From the table we can see a breakdown of the positive qualities and the negative qualities of each board. Firstly we can immediately cut out the SiWx917. The SiWx917 only exits as a chip, meaning that we would need to design a board and everything for it, which would drive up the price. Next, we can remove the Arduino Nano ESP32. This esp32 is firstly way too large to be justified and may interfere with the player, it is too expensive and is we use this, the project cannot fit the budget. It is also the heaviest on the list. We we can also justify not using the SiWx917 and the Arduino Nano Esp32 as they are the only boards that don't have a onboards power management system, meaning that a additional board if needed to facilitate power management.  
 This leaves us with the ESP32-C3 and ESP32-C6. The ESP32-C3 is cheaper, however to retain a longer battery life it is more beneficial to choose the system with the lower power draw. Both systems weigh approximately the same, and have the same dimensions. So now its a matter of comparing the lower price of the ESP32-C3 to the more advanced Bluetooth of the ESP32-C6 and its lower power draw. I believe that the extra ~$2 is worth the upgrades, especially with the efficiency cores. This is why the ESP32-C6 will be chosen as the main microcontroller of the system. In the case that the system starts to creep above budget, this will be reverted to the ESP32-C3
 #### 2.1.2 - Accelerometer
@@ -345,16 +341,4 @@ Next, the accelerometer that will be used needs to be finalised. While there are
 | **BNO085 (9-DOF AHRS)**           | <font color="#00b050">~20 x 15 mm</font>    | 9-axis with onboard ARM Cortex-M0 processor                                 | ~$9.40 – $12.00                             |
 | **BNO055 (Absolute Orientation)** | <font color="#00b050">~20 x 12 mm</font>    | 9-axis; <font color="#00b050">outputs Euler angles and Quaternions directly | ~$10.30 – $14.50          </font>           |
 All of the options for IMUs are perfectly viable for the project. So the decision of what IMU to use goes down to Price and additional features. The feature that caught my eye was the automatic Quaternion output of the BNO055. This feature helps reduce the amount of software that needs to be built to help analyse the tennis stroke, and this will help in the production. However it is nearly double the cost of the GY-91. The question arises weather the extra up to 7 dollars are worth the ease of software development. 
-The tie-breaker here would be overall power draw. As Battey 
-
-Like nothing much
-she gave me her side
-about how she has to choose her bf over you
-she says that its betraying her bf, as they (steven only ig) would hate him
-Vitchea is mad at you?
-Lyz doesnt hate you, she wants to tecah you a lesson
-Idk whats with vitchea
-
-
-You did dog her, and she needs to be in good books with steven and stuff
-she doesnt "hate" you
+The tie-breaker here would be overall power draw. As there will be limited battery capacity, we should look at the option that minimises total power usage. On paper, the BNO085 draws marginally less power on average usage, however, the BNO055 has onboard quaternion synthesis. If the task of the quaternion processing was given to the SoC instead, the computation would take significantly more power than onboard the BNO055, as the BNO055 has its components specialised to to compute quaternions in the most efficient manner. 
