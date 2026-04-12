@@ -270,7 +270,7 @@ The system proposed is a tennis analyser with it's intended audience being both 
 #### 1.2.2 System Analysis
 - Peak angular velocity occur within a highly localized ±15ms  window surrounding ball impact [12], [13]
   - Any viable microcontroller and IMU subsystem must communicate via a high-bandwidth protocol capable of sustaining a minimum data sampling rate of 100Hz (10ms intervals), with an optimal target of ≥200Hz (5ms intervals) for high-fidelity stroke digitization.
- ### 1.3 Evaluation Criteria
+### 1.3 Evaluation Criteria
 - **1.3.1 Criteria Construction:** Develop a set of criteria to evaluate the operational system and your use of the systems engineering process.
 - **1.3.2 Linking Parameters:** Link each criterion to the parameters, constraints, and considerations identified in the design brief.
 - **1.3.3 Operationalization:** Document how each criterion will be checked or tested during the development and realization of the system.
@@ -316,19 +316,19 @@ First the microcontroller that we need to use should be discussed. The baseline 
 | Additional     | RISC-V; hobbyist fave                                                        | Wi-Fi 6, Matter, Efficiency cores                | Ultra-Low Wi-Fi Keep-Alive                                                    | Dual-core S3; official support                        |
 | Weight         | ~2g                                                                          | ~2g                                              | >1g                                                                           | <7g                                                   |
 
-From the table we can see a breakdown of the positive qualities and the negative qualities of each board. Firstly we can immediately cut out the SiWx917. The SiWx917 only exits as a chip, meaning that we would need to design a board and everything for it, which would drive up the price. Next, we can remove the Arduino Nano ESP32. This esp32 is firstly way too large to be justified and may interfere with the player, it is too expensive and is we use this, the project cannot fit the budget. It is also the heaviest on the list. We we can also justify not using the SiWx917 and the Arduino Nano Esp32 as they are the only boards that don't have a onboards power management system, meaning that a additional board if needed to facilitate power management.  
+From the table we can see a breakdown of the positive qualities and the negative qualities of each board. Firstly we can immediately cut out the SiWx917. The SiWx917 only exits as a chip, meaning that we would need to design a board and everything for it, which would drive up the price. Next, we can remove the Arduino Nano ESP32. This esp32 is firstly way too large to be justified and may interfere with the player, it is too expensive and is we use this, the project cannot fit the budget. It is also the heaviest on the list. We  we can also justify not using the SiWx917 and the Arduino Nano Esp32 as they are the only boards that don't have a onboards power management system, meaning that a additional board if needed to facilitate power management.  
 This leaves us with the ESP32-C3 and ESP32-C6. The ESP32-C3 is cheaper, however to retain a longer battery life it is more beneficial to choose the system with the lower power draw. Both systems weigh approximately the same, and have the same dimensions. So now its a matter of comparing the lower price of the ESP32-C3 to the more advanced Bluetooth of the ESP32-C6 and its lower power draw. I believe that the extra ~$2 is worth the upgrades, especially with the efficiency cores. This is why the ESP32-C6 will be chosen as the main microcontroller of the system. In the case that the system starts to creep above budget, this will be reverted to the ESP32-C3
 #### 2.1.2 - Accelerometer
 Next, the accelerometer that will be used needs to be finalised. While there are not many specifications required for our accelerometer, we still need it to be cheap, largely accurate, and fit within our system. For a metric, we can assume that the maximum size of the accelerometer is the size of the SoC chosen, namely the ESP32-C6, with a size of 21 x 17.5 mm. 
-##### GY-91 (MPU-9250 + BMP280)
+##### GY-91 (MPU-9250 + BMP280) [20]
 - 20.5 x 14.3 mm
 - 9-axis (Accel/Gyro/Mag) plus a Barometer (10-DOF total).
 - ~$7.60 – $8.50
-##### BNO085 (9-DOF AHRS)
+##### BNO085 (9-DOF AHRS) [21]
 - ~20 x 15 mm
 - 9-axis with an onboard ARM Cortex-M0 processor
 - ~$9.40 – $12.00
-##### BNO055 (Absolute Orientation)
+##### BNO055 (Absolute Orientation) [22]
 - ~20 x 12 mm
 - 9-axis Absolute Orientation
 - ~$10.30 – $14.50
@@ -341,4 +341,33 @@ Next, the accelerometer that will be used needs to be finalised. While there are
 | **BNO085 (9-DOF AHRS)**           | <font color="#00b050">~20 x 15 mm</font>    | 9-axis with onboard ARM Cortex-M0 processor                                 | ~$9.40 – $12.00                             |
 | **BNO055 (Absolute Orientation)** | <font color="#00b050">~20 x 12 mm</font>    | 9-axis; <font color="#00b050">outputs Euler angles and Quaternions directly | ~$10.30 – $14.50          </font>           |
 All of the options for IMUs are perfectly viable for the project. So the decision of what IMU to use goes down to Price and additional features. The feature that caught my eye was the automatic Quaternion output of the BNO055. This feature helps reduce the amount of software that needs to be built to help analyse the tennis stroke, and this will help in the production. However it is nearly double the cost of the GY-91. The question arises weather the extra up to 7 dollars are worth the ease of software development. 
-The tie-breaker here would be overall power draw. As there will be limited battery capacity, we should look at the option that minimises total power usage. On paper, the BNO085 draws marginally less power on average usage, however, the BNO055 has onboard quaternion synthesis. If the task of the quaternion processing was given to the SoC instead, the computation would take significantly more power than onboard the BNO055, as the BNO055 has its components specialised to to compute quaternions in the most efficient manner. 
+The tie-breaker here would be overall power draw. As there will be limited battery capacity, we should look at the option that minimises total power usage. On paper, the BNO085 draws marginally less power on average usage, however, the BNO055 has onboard quaternion synthesis. If the task of the quaternion processing was given to the SoC instead, the computation would take significantly more power than onboard the BNO055, as the BNO055 has its components specialised to to compute quaternions in the most efficient manner. This is why the BNO055 will be selected.
+#### Battery
+For the battery, we need to both decide what kind of battery we will be, and how big it'll be. The limitations that need to be met are the limited space available, minimising the total mass of the battery, and making sure that it lasts long. A few options for the type of battery were:
+##### Li-ion (Cylindrical - 14500)
+- Standard "AA" size but 3.7V.
+- Extremely durable steel casing protects against impact.
+- Mass: ~20g. This leaves almost zero budget for the PCB, housing, and sensor.
+- Capacity: ~800mAh.
+##### Li-Po (Pouch - 402030)
+- Flexible, flat vacuum-sealed "pouch" chemistry.
+- Highest energy-to-weight ratio.
+- Mass: ~5g.
+- Capacity: ~250mAh.
+- Requires a rigid 3D-printed "exoskeleton" to prevent puncture during racquet vibrations.
+##### Li-Po (Coin Cell - LIR2450)
+- Rechargeable button cell.
+- Very compact and easy to mount flush.
+- Mass: ~4g.
+- Capacity: ~120mAh.
+- Drawback: Low discharge rate (C-rate) may cause the ESP32-C6 to brown out during BLE transmission peaks.
+##### Comparison
+###### Table 2.1.3
+
+| Battery Type | Dimensions (mm)                                                   | Weight (g)                        | Capacity (mAh) | Suitability                                                          |
+| ------------ | ----------------------------------------------------------------- | --------------------------------- | -------------- | -------------------------------------------------------------------- |
+| Li-ion 14500 | <font color="#ff0000">50 x 14                             </font> | <font color="#ff0000">~20g</font> | 800            | <font color="#ff0000">Low - Too heavy; ruins racquet balance.</font> |
+| Li-Po Pouch  | 30 x 20 x 4                                                       | <font color="#00b050">~5g</font>  | 250            | <font color="#00b050">High - Ideal weight/power balance.</font>      |
+| LIR2450 Coin | <font color="#00b050">24.5 x 5</font>                             | <font color="#00b050">~4g</font>  | 120            | Medium - Risk of power failure under load                            |
+|              |                                                                   |                                   |                |                                                                      |
+From the data we can see that the LI-Ion Battey is definitely out of the picture as it does not 

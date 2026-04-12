@@ -17,3 +17,6 @@
 17. “Silicon Labs.” _Silabs.com_, 2026, www.silabs.com/wireless/wi-fi/siwx917-wireless-socs. Accessed 31 Mar. 2026.
 18. “Getting Started with Seeed Studio XIAO ESP32C6 | Seeed Studio Wiki.” _Seeedstudio.com_, 5 Aug. 2024, wiki.seeedstudio.com/xiao_esp32c6_getting_started/.
 19. “Getting Started with Seeed Studio XIAO ESP32C3 - Seeed Wiki.” _Wiki.seeedstudio.com_, wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/.
+20. “GY-91 MPU 9250 + BMP280 Sensor Module.” _Tempero Systems Shopping_, 2025, temperosystems.com.au/products/gy-91-mpu-9250-bmp280-sensor-module/. Accessed 11 Apr. 2026.
+21. Industries, Adafruit. “Adafruit 9-DOF Orientation IMU Fusion Breakout - BNO085 (BNO080).” _Www.adafruit.com_, www.adafruit.com/product/4754.
+22. “Adafruit 9-DOF Absolute Orientation IMU Fusion Breakout - BNO055.” _Core-Electronics.com.au_, core-electronics.com.au/adafruit-9-dof-absolute-orientation-imu-fusion-breakout-bno055.html.
