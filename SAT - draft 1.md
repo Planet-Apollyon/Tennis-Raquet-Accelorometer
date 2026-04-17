@@ -342,7 +342,7 @@ Next, the accelerometer that will be used needs to be finalised. While there are
 | **BNO055 (Absolute Orientation)** | <font color="#00b050">~20 x 12 mm</font>    | 9-axis; <font color="#00b050">outputs Euler angles and Quaternions directly | ~$10.30 – $14.50          </font>           |
 All of the options for IMUs are perfectly viable for the project. So the decision of what IMU to use goes down to Price and additional features. The feature that caught my eye was the automatic Quaternion output of the BNO055. This feature helps reduce the amount of software that needs to be built to help analyse the tennis stroke, and this will help in the production. However it is nearly double the cost of the GY-91. The question arises weather the extra up to 7 dollars are worth the ease of software development. 
 The tie-breaker here would be overall power draw. As there will be limited battery capacity, we should look at the option that minimises total power usage. On paper, the BNO085 draws marginally less power on average usage, however, the BNO055 has onboard quaternion synthesis. If the task of the quaternion processing was given to the SoC instead, the computation would take significantly more power than onboard the BNO055, as the BNO055 has its components specialised to to compute quaternions in the most efficient manner. This is why the BNO055 will be selected.
-#### Battery
+#### 2.1.3 - Battery
 For the battery, we need to both decide what kind of battery we will be, and how big it'll be. The limitations that need to be met are the limited space available, minimising the total mass of the battery, and making sure that it lasts long. A few options for the type of battery were:
 ##### Li-ion (Cylindrical - 14500)
 - Standard "AA" size but 3.7V.
@@ -370,4 +370,27 @@ For the battery, we need to both decide what kind of battery we will be, and how
 | Li-Po Pouch  | 30 x 20 x 4                                                       | <font color="#00b050">~5g</font>  | 250            | <font color="#00b050">High - Ideal weight/power balance.</font>      |
 | LIR2450 Coin | <font color="#00b050">24.5 x 5</font>                             | <font color="#00b050">~4g</font>  | 120            | Medium - Risk of power failure under load                            |
 |              |                                                                   |                                   |                |                                                                      |
-From the data we can see that the LI-Ion Battey is definitely out of the picture as it does not 
+From the data we can see that the LI-Ion Battey is definitely out of the picture as it does not fit. This leaves the coin battery and the Li-Po pouch. The major difference is the capacity, as the weight is basically the same. As the Li-Po pouch is more than double the capacity of the coin, the Pouch will be chosen.
+
+### 2.2 - Structure
+The way this project will be structured will need to be analysed. 
+#### 2.2.1 - Placement
+The system can be placed at various locations, each with its own weaknesses and strengths. The placement dictates the quality of the data and the mechanical stress on the hardware.
+##### Comparison
+###### Table 2.2.1
+
+| Location                 | Weight/Balance Impact                 | Data Fidelity                                | Durability Risk                               | Complexity                    |
+| ------------------------ | ------------------------------------- | -------------------------------------------- | --------------------------------------------- | ----------------------------- |
+| **Hilt (Base of Grip)**  | Low - Near hand center.               | **High** - Captures pure racquet rotation.   | Low - Protected by hand.                      | Simple clamp mount.           |
+| **Throat (Above Grip)**  | Medium - Shifts balance slightly.     | **High** - Stable orientation data.          | **High** - Risk of impact during transitions. | Custom V-mount needed.        |
+| **Internal (Butt Cap)**  | Medium - Changes swing weight.        | **Medium** - Potential signal interference.  | Low - Encased in handle.                      | Requires handle modification. |
+| **Lateral Frame (Hoop)** | **High** - Distorts racquet symmetry. | **Extreme** - High resolution but noisy.     | **Critical** - High vibration & ball impact.  | Minimal (Adhesive/Tape).      |
+| **Wristband/Sleeve**     | **Zero** - No change to racquet.      | **Low** - Does not track racquet face angle. | **Very Low** - Safest for electronics.        | Fabric integration.           |
+
+##### Analysis
+The Lateral Frame and Internal Integration are the first to be dismissed. Mounting on the hoop creates a unbalanced weight that would ruin the player's mechanics, and the vibration at the frame risks sensor clipping and hardware failure. While internal mounting looks visually clean, the SOC’s signal would be severely affected by the handle, and the shift in the balance point (making the racquet more head-light) would change the user's existing swing timing, which doesn't align with the criterion. 
+Next, we evaluate the Wristband/Sleeve option. A wrist-mounted sensor tracks the arm, not the racquet. Because of "wrist lag" and racquet flex, the arm's orientation does not perfectly map to the racquet face's orientation at the point of contact. This would lead to inaccurate spin and power analysis.
+This leaves the Hilt and the Throat. The throat offers excellent data stability, but it occupies the space used by the non-dominant hand during a two-handed backhand, posing a safety risk to the player and the system.
+The Hilt remains the most viable location. It provides the most accurate "raw" data of the racquet’s movement with the least amount of mechanical interference or risk of physical impact. By mounting at the base of the grip, we ensure the sensor survives high-intensity play while maintaining a linear relationship between the hand's torque and the racquet's response. Therefore, the Hilt will be the best mounting location, with a secondary focus on a low-profile 3D-printed housing to minimize the "weight" felt by the player.
+#### 2.1.2 - Feedback loop system 
+The player needs something that provides instantaneous feedback from the system, and for this we need to find the way that this feedback will be given. 
