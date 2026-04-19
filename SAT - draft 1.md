@@ -271,10 +271,32 @@ The system proposed is a tennis analyser with it's intended audience being both 
 - Peak angular velocity occur within a highly localized ±15ms  window surrounding ball impact [12], [13]
   - Any viable microcontroller and IMU subsystem must communicate via a high-bandwidth protocol capable of sustaining a minimum data sampling rate of 100Hz (10ms intervals), with an optimal target of ≥200Hz (5ms intervals) for high-fidelity stroke digitization.
 ### 1.3 Evaluation Criteria
-- **1.3.1 Criteria Construction:** Develop a set of criteria to evaluate the operational system and your use of the systems engineering process.
-- **1.3.2 Linking Parameters:** Link each criterion to the parameters, constraints, and considerations identified in the design brief.
-- **1.3.3 Operationalization:** Document how each criterion will be checked or tested during the development and realization of the system.
-- **1.3.4 Justification of Relevance:** Provide a justification for the relevance of the criteria to the design brief and the engineering process. 
+#### 1.3.1 & 1.3.2 Criteria Construction and Linking Parameters
+The following criteria have been developed to evaluate the system's performance against the constraints identified in 1.1 and 1.2.
+##### Table 1.3.1: Evaluation Criteria and Parameter Linkage
+
+| Evaluation Criterion       | Linked Parameter / Constraint    | Success Standard (Metric)                                                                                  |
+| -------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| System Mass - C1           | Biomechanical / Anthropometric   | Total mass added to the racquet must be ≤30g.                                                              |
+| Sensing Accuracy - C2      | Functional / Data Fidelity       | ≥85% accuracy in identifying "Good" vs "Bad" strokes compared to coach analysis.                           |
+| Feedback Latency - C3      | Operational / Temporal           | Feedback must be given within ≤500ms of ball impact.                                                       |
+| Mechanical Durability - C4 | Operational / Temporal           | System must maintain structural integrity after 100 high power shots                                       |
+| Economic Viability - C5    | Social / Economic Sustainability | Total cost for the sensor unit must be ≤$50 AUD.                                                           |
+| longevity - C6             | Operational / Temporal           | System must last at least 2 hours of playing, and constantly provide feedback for the duration of playing. |
+#### 1.3.3 Operationalisation (Testing Methods)
+To verify that the system was successful, the following testing measures will be taken. 
+- (C1) The integrated sensor unit and its mounting bracket will be weighed using a digital scale. This ensures accuracy and helps us understand if the system is obtrusive. 
+- (C2) 50 controlled strokes will be recorded using a camera, and then judged by a professional tennis coach. The software's classification output will be compared against the coach's evaluation to calculate the success percentage.
+- (C3) Using a camera, the number of frames between the moment of ball-string contact and the final actuation of the mechanical flag will be counted.
+- (C4) The system will be subjected to a stress test consisting of 100 consecutive "smashes" against a tennis ball machine. Post-test, the 9DOF calibration data will be checked for zero-offset drift.
+- (C6) The system will be used constantly for 2 hours straight in a tennis match, and the battery, and operation will be analysed.
+#### 1.3.4 Rubric for testing
+
+#### 1.3.5 Justification of Relevance
+The relevance of these criteria is rooted in the engineering requirement for a "seamless" user experience.
+1. **C1 (Mass):** A racquet's "feel" is sensitive to even minor weight changes. Exceeding 30g shifts the balance point toward the handle, which could cause a player to swing "early," effectively corrupting the very biomechanics the system is trying to analyze.
+2. **C3 (Latency):** In high-intensity training, feedback must be immediate to allow for "muscle memory" adjustment. If the flag raises after the player has already reset for the next shot, the cognitive link between the action and the result is severed.
+3. **C5 & C6 (Ethics/Sustainability):** Since this project aims to address "distributive justice" in sports, the system must remain affordable and repairable. A device should be cheap to buy and viable, as if it, creates long-term costs that the intended "socioeconomically disadvantaged" user cannot sustain.
 ## 2. Research
 In 1.1 to 1.2, the key considerations for this project were discussed. From this it is evident that the system must perform a few major functions; take data from a tennis shot, process it, Transmit it (perhaps via Bluetooth), and then provide feedback to the player. Then more limitations arise, where it must be imperceivable, long lasting, durable, accurate, and fast. To solve all these issues, proper research must be done, to identify the components, processes and pathways required to meet the criterion. 
 ### 2.1 - Components
@@ -372,10 +394,15 @@ For the battery, we need to both decide what kind of battery we will be, and how
 |              |                                                                   |                                   |                |                                                                      |
 From the data we can see that the LI-Ion Battey is definitely out of the picture as it does not fit. This leaves the coin battery and the Li-Po pouch. The major difference is the capacity, as the weight is basically the same. As the Li-Po pouch is more than double the capacity of the coin, the Pouch will be chosen.
 
+#### Modelling
+To model how the system will be configured, multiple stages of design will have to be produced. First, a flow diagram of the system must be created.
+
+
 ### 2.2 - Structure
 The way this project will be structured will need to be analysed. 
 #### 2.2.1 - Placement
 The system can be placed at various locations, each with its own weaknesses and strengths. The placement dictates the quality of the data and the mechanical stress on the hardware.
+
 ##### Comparison
 ###### Table 2.2.1
 
@@ -392,5 +419,30 @@ The Lateral Frame and Internal Integration are the first to be dismissed. Mounti
 Next, we evaluate the Wristband/Sleeve option. A wrist-mounted sensor tracks the arm, not the racquet. Because of "wrist lag" and racquet flex, the arm's orientation does not perfectly map to the racquet face's orientation at the point of contact. This would lead to inaccurate spin and power analysis.
 This leaves the Hilt and the Throat. The throat offers excellent data stability, but it occupies the space used by the non-dominant hand during a two-handed backhand, posing a safety risk to the player and the system.
 The Hilt remains the most viable location. It provides the most accurate "raw" data of the racquet’s movement with the least amount of mechanical interference or risk of physical impact. By mounting at the base of the grip, we ensure the sensor survives high-intensity play while maintaining a linear relationship between the hand's torque and the racquet's response. Therefore, the Hilt will be the best mounting location, with a secondary focus on a low-profile 3D-printed housing to minimize the "weight" felt by the player.
-#### 2.1.2 - Feedback loop system 
-The player needs something that provides instantaneous feedback from the system, and for this we need to find the way that this feedback will be given. 
+#### 2.1.2 - Feedback Loop System
+The player needs a system that provides instantaneous feedback. Rather than integrating feedback into the racquet—which adds weight and mechanical noise—an external mechanical "Flag" system will be analysed. 
+##### Flag Hoist (Servo-Actuated)
+- Uses servo motor to physically raise a coloured flag or "arm."
+- **Logic:** Provides a clear, binary "Success/Fail" visual that doesn't require the player to look at their hand.
+- **Drawback:** Requires a second microcontroller and power source on the sidelines.
+##### Digital Text-Based Display
+- A large-scale digital display that shows specific metrics like "RPM" or "KM/H."
+- **Logic:** Provides quantitative data rather than just qualitative.
+- **Drawback:** High cost and low visibility in direct sunlight unless using expensive high-nit flip-disc or E-Ink displays.
+##### Auditory "Umpire" (Speaker/Siren)
+- A sideline speaker that calls out stats or plays a tone.
+- **Logic:** Keeps the player's eyes 100% on the ball.
+- **Drawback:** Massive power requirements and potential to annoy players on adjacent courts.
+##### Comparison
+###### Table 2.1.4
+
+| Feedback System           | Visibility/Clarity       | Portability | Response Latency  | Power Requirement |
+| ------------------------- | ------------------------ | ----------- | ----------------- | ----------------- |
+| **Flag Hoisting Machine** | **High** (Mechanical)    | Medium      | Low (Servo speed) | Medium (AA/Li-Po) |
+| **LED Text Display**      | Medium (Sunlight issues) | Low         | Low               | **High**          |
+| **Auditory Siren**        | **High**                 | Medium      | Instant           | **High**          |
+
+##### Analysis
+The Auditory siren seems like one of the best options, however, the location that this system is going to be needs to be understood. In a high stakes tennis environment, a siren is not going to be the most effective form of communication as auditory input will most likely be ignored by players during rallies. Additionally, the use of a siren may interfere with the mind-body connection that is perceived when hearing the ball bounce, throwing the player off. 
+Then, the text display also looks promising, however, for this project we must be practical. The system will be used outdoors in broad daylight, where leds will struggle to output enough light to be visible, especially with glare. And even if they do output enough, it would be distracting. 
+This leaves the flag system, which utilises various colours to indicate what the 
