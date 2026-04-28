@@ -468,14 +468,35 @@ The flags will be controlled by 2 servos, which will pull up either a red or gre
 Since, a racquet placed butt mount was decided, new complications arise. First, the structure of the system must be durable, waterproof and able to survive the elements, dissipate heat effectively, and stay attached to the racquet at all times. 
 #### 2.3.1 - Housing material
 The housing of the system needs to be able to dissipate vibrations, be sturdy enough to not damage the system upon scenarios such as dropping the racquet and water and dust resistant to a certain extent. It also needs to be light as possible.
-#### 2.3.2 - Mounting method
+##### TPU
+##### PLA
+##### PETG
+##### ABS
+##### Comparison
+###### Table 2.3.1 – Material Properties and Suitability
 
+| Material  | Price (AUD/kg) | Hardness / Flexibility      | Tensile Strength | Impact / Fatigue Resistance  | Heat Resistance | Water / Sweat Resistance | Print Difficulty | Key Problems                         |
+| --------- | -------------- | --------------------------- | ---------------- | ---------------------------- | --------------- | ------------------------ | ---------------- | ------------------------------------ |
+| PLA       | $15–$25        | High stiffness, brittle     | Medium (~60 MPa) | Low (cracks under vibration) | Low (~60°C)     | Poor–Moderate            | Very Easy        | Brittle failure, poor fatigue life   |
+| PLA+      | $20–$35        | Slightly more ductile       | Medium–High      | Medium                       | Low–Medium      | Moderate                 | Easy             | Still degrades under repeated shock  |
+| PETG      | $25–$40        | Moderate stiffness, ductile | Medium (~50 MPa) | **High** (absorbs impact)    | Medium (~80°C)  | **High**                 | Easy–Medium      | Slight flex (less rigid than PLA)    |
+| ABS       | $25–$40        | Tough, semi-flexible        | Medium           | High                         | High (~100°C)   | Moderate                 | Hard             | Warping, poor dimensional accuracy   |
+| TPU (95A) | $35–$60        | **Flexible (rubbery)**      | Low–Medium       | **Very High (damping)**      | Medium (~80°C)  | **High**                 | Medium–Hard      | Too flexible → unstable sensor frame |
+
+
+Our goal is to minimise the amount of vibrations that pass through the racquet into the 
+
+
+
+While TPU is the preferred damping material, TPE can be utilised as an alternative by restricting its use to a thin, mechanically constrained interface layer. This ensures effective vibration reduction while preventing excessive deformation that would otherwise degrade IMU accuracy.
+#### 2.3.2 - Mounting method
+Now the way the system will be attached to the racquet will need to be finalised. It needs to be as small as possible, secure, lightweight and non-intrusive.
 
 #### 2.3.3 - Design Software
 
 ## 3 - Planning
 ### 3.1 - Baseline timeframe
-First we need to create a baseline 
+First we need to create a baseline timeframe for the project. Since this project is due around the start of October. So we set a baseline final submission date of the end of term 3 holidays, or 4th of October 2026. Additionally, part 1, 2 and 3 are due around the first of June. To ensure that we stay on track, we can assume that the submission of this is earlier and is around the end of May. It is evident that the logical ordering of the project is the order of the parts, such that to do part 2, part 1 must be done and so on. However, since each part has many overlap, we can work on a few adjacent parts at once. 
 
 
 # to add
@@ -503,7 +524,7 @@ First we need to create a baseline
 
 
 
-# Section 3: Generating and Designing
+'' # Section 3: Generating and Designing
 
 ## 3.1 Design Thinking Process
 
@@ -1001,3 +1022,11 @@ The selected design achieves an integrated and controlled system through:
 [4] Tower Pro, "SG90 9g Micro Servo Datasheet," 2023.  
 [5] Pololu, "Li-Po Battery Basics," 2024.
 
+
+
+| Sensor                             | Dimensions     | Features                                                          | Price Range      |
+| ---------------------------------- | -------------- | ----------------------------------------------------------------- | ---------------- |
+| GY-91 (MPU-9250 + BMP280) [20]     | 20.5 × 14.3 mm | 9-axis (Accel/Gyro/Mag) + Barometer (10-DOF total)                | ~$7.60 – $8.50   |
+| BNO085 (9-DOF AHRS) [21]           | ~20 × 15 mm    | 9-axis with onboard ARM Cortex-M0 processor                       | ~$9.40 – $12.00  |
+| BNO055 (Absolute Orientation) [22] | <font color="#9bbb59">~20 × 12 mm    | 9-axis absolute orienta</font>tion; outputs Euler angles and quaternions | ~$10.30 – $14.50 |
+''
